@@ -1,17 +1,9 @@
 import { useState } from "react";
-import Header from "./component/Header";
-import UserInput from "./component/UserInput";
-import Result from "./component/Result";
+import Header from "./components/Header";
+import UserForm from "./components/UserForm";
+import Result from "./components/Result";
 
-const HEADER_TABLE_LIST = [
-  "Year",
-  "Investment Value",
-  "Interest (Year)",
-  "Total Interest",
-  "Invested Capital",
-];
-
-const INITIAL_USER_INPUT = {
+const INITIAL_USER_FORM = {
   initialInvestment: 15000,
   annualInvestment: 1200,
   expectedReturn: 6,
@@ -19,24 +11,25 @@ const INITIAL_USER_INPUT = {
 };
 
 const App = () => {
-  const [userInput, setUserInput] = useState(INITIAL_USER_INPUT);
+  const [userForm, setUserForm] = useState(INITIAL_USER_FORM);
 
-  const isValid = userInput.duration >= 1;
-  const handleInputChange = (keyUserInput, newInput) => {
-    setUserInput((prevInput) => ({
+  const isValid = userForm.duration >= 1;
+  const handleFormChange = (keyUserInput, newInput) => {
+    setUserForm((prevInput) => ({
       ...prevInput,
-      [keyUserInput]: +newInput,
+      [keyUserInput]: parseFloat(newInput),
     }));
   };
 
   return (
     <>
       <Header />
-      <UserInput onChange={handleInputChange} userInput={userInput} />
-      {!isValid && (
+      <UserForm onChange={handleFormChange} userForm={userForm} />
+      {isValid ? (
+        <Result userForm={userForm} />
+      ) : (
         <p className="center">please enter a duration greater than zero.</p>
       )}
-      {isValid && <Result userInput={userInput} />}
     </>
   );
 };
